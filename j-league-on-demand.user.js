@@ -2,7 +2,9 @@
 // @name           j-league-on-demand
 // @namespace      http://twitter.com/hongo
 // @include        https://vod.skyperfectv.co.jp/live_list.php
-// @version        0.1
+// @downloadUrl    https://raw.githubusercontent.com/downloads/aoba/j-league-on-demand/master/j-league-on-demand.user.js
+// @updateUrl      https://raw.githubusercontent.com/downloads/aoba/j-league-on-demand/master/j-league-on-demand.user.js
+// @version        0.2
 // @description    Show J-League On Demand Streaming Video List
 // ==/UserScript==
 (function(){
