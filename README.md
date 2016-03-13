@@ -1,10 +1,11 @@
 j-league-on-demand
 ====
 
-## Description
-
 this is a userscript for https://vod.skyperfectv.co.jp/live_list.php .  
 this userscript will show us the streaming video list in J-League on demand.  
+
+## Screenshot
+![live and video list](https://github.com/aoba/j-league-on-demand/raw/master/screenshot.png)
 
 ## Requirements
 
