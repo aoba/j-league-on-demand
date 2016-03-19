@@ -4,7 +4,7 @@
 // @include        https://vod.skyperfectv.co.jp/live_list.php
 // @downloadUrl    https://raw.githubusercontent.com/downloads/aoba/j-league-on-demand/master/j-league-on-demand.user.js
 // @updateUrl      https://raw.githubusercontent.com/downloads/aoba/j-league-on-demand/master/j-league-on-demand.user.js
-// @version        0.2
+// @version        0.3
 // @description    Show J-League On Demand Streaming Video List
 // ==/UserScript==
 (function(){
@@ -117,13 +117,11 @@
 					var json = JSON.parse(response.responseText);
 					var episodes = json[1].episode;
 					var regexp = /第([0-9]+)節/; // 第3節 川崎F VS 名古屋
-					var lastSectionRegexp = /./;
 					var highlightRegexp = /ハイライト/;
 					var j1 = [];
 					var j2 = [];
 					var j3 = [];
 					var other = [];
-					var section = ''; // 節番号
 					
 					for(var i in episodes){
 						var epi = episodes[i];
@@ -131,14 +129,6 @@
 							continue;
 						}
 						var name = epi.episode_name;
-						// 最新の節番号の取得
-						if (!section){
-							res = regexp.exec(name);
-							if (res){
-								section = res[1];
-								lastSectionRegexp = new RegExp('第' + section + '節');
-							}
-						}
 						// ハイライトはotherへ追加
 						if (name.match(highlightRegexp)){
 							other.push(epi);
@@ -146,15 +136,12 @@
 						}
 						// 「第n節」が含まれる場合は試合とみなす
 						if (name.match(regexp)){
-							// 最新の節のみ、各リーグごとに追加する
-							if (name.match(lastSectionRegexp)){
-								if (0 < name.indexOf('J1')){
-									j1.push(epi);
-								} else if (0 < name.indexOf('J2')){
-									j2.push(epi);
-								} else if (0 < name.indexOf('J3')){
-									j3.push(epi);
-								}
+							if (0 < name.indexOf('J1')){
+								j1.push(epi);
+							} else if (0 < name.indexOf('J2')){
+								j2.push(epi);
+							} else if (0 < name.indexOf('J3')){
+								j3.push(epi);
 							}
 						} else {
 							other.push(epi);
