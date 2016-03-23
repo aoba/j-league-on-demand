@@ -4,7 +4,7 @@
 // @include        https://vod.skyperfectv.co.jp/live_list.php
 // @downloadUrl    https://raw.githubusercontent.com/downloads/aoba/j-league-on-demand/master/j-league-on-demand.user.js
 // @updateUrl      https://raw.githubusercontent.com/downloads/aoba/j-league-on-demand/master/j-league-on-demand.user.js
-// @version        0.3
+// @version        0.4
 // @description    Show J-League On Demand Streaming Video List
 // ==/UserScript==
 (function(){
@@ -142,6 +142,8 @@
 								j2.push(epi);
 							} else if (0 < name.indexOf('J3')){
 								j3.push(epi);
+							} else {
+								other.push(epi);
 							}
 						} else {
 							other.push(epi);
