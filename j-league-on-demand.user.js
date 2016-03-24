@@ -4,7 +4,7 @@
 // @include        https://vod.skyperfectv.co.jp/live_list.php
 // @downloadUrl    https://raw.githubusercontent.com/downloads/aoba/j-league-on-demand/master/j-league-on-demand.user.js
 // @updateUrl      https://raw.githubusercontent.com/downloads/aoba/j-league-on-demand/master/j-league-on-demand.user.js
-// @version        0.5
+// @version        0.6
 // @description    Show J-League On Demand Streaming Video List
 // ==/UserScript==
 (function(){
@@ -19,7 +19,6 @@
 		self.container = document.getElementById('container');
 		self.liveDivId = '____now_on_air';
 		self.videoDivId = '____video_list';
-		self.now;
 
 		self.insertAfter = function(newNode, referenceNode){
 			referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
@@ -72,7 +71,8 @@
 				var name = epi.episode_name;
 				if (isLive){
 					// isLive=true の場合、現在放送中の映像ソースのみが対象
-					if (self.now < epi.encode_start_end){
+					var now = self.getYYYYMMDDHHMISS();
+					if (now < epi.encode_start_end){
 						continue;
 					}
 				} else {
@@ -96,7 +96,6 @@
 		}
 
 		self.showLiveList = function(postData, title, isLive){
-			self.now = self.getYYYYMMDDHHMISS();
 			isLive = (isLive) ? true : false;
 			newDivId = (isLive) ? self.liveDivId : self.videoDivId;
 			GM_xmlhttpRequest({
