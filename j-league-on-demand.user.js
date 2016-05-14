@@ -4,9 +4,11 @@
 // @include        https://vod.skyperfectv.co.jp/live_list.php
 // @downloadUrl    https://raw.githubusercontent.com/downloads/aoba/j-league-on-demand/master/j-league-on-demand.user.js
 // @updateUrl      https://raw.githubusercontent.com/downloads/aoba/j-league-on-demand/master/j-league-on-demand.user.js
-// @version        0.6
+// @require        http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js
+// @version        0.71
 // @description    Show J-League On Demand Streaming Video List
 // ==/UserScript==
+
 (function(){
 
 	var JOD = function(){
@@ -22,7 +24,7 @@
 
 		self.insertAfter = function(newNode, referenceNode){
 			referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-		}
+		};
 
 		self.getYYYYMMDDHHMISS = function(){
 			var now = new Date();
@@ -34,7 +36,7 @@
 			var MI = ('0' + now.getMinutes()).slice(-2);
 			var SS = ('0' + now.getSeconds()).slice(-2);
 			return YYYY+'-'+MM+'-'+DD+' '+HH+':'+MI+':'+SS;
-		}
+		};
 
 		self.createHtml = function(episodes, title){
 			var html = [];
@@ -46,7 +48,7 @@
 				html.push('<a style="font-size:15px;" target="____live" href="' + self.LiveUrl + epi.episode_id + '">' + epi.episode_name + '</a><br />');
 			}
 			return html.join('');
-		}
+		};
 
 		self.createDiv = function(data, title, id){
 			var div = document.createElement('div');
@@ -60,7 +62,7 @@
 			div.innerHTML += self.createHtml(data.j3, '■J3');
 			div.innerHTML += self.createHtml(data.other, '■Other');
 			return div;
-		}
+		};
 
 		self.classify = function(episodes, isLive){
 			isLive = (isLive) ? true : false;
@@ -93,23 +95,24 @@
 				}
 			}
 			return data;
-		}
+		};
 
 		self.showLiveList = function(postData, title, isLive){
 			isLive = (isLive) ? true : false;
 			newDivId = (isLive) ? self.liveDivId : self.videoDivId;
-			GM_xmlhttpRequest({
-				method: "POST",
+			$.ajax({
 				url: self.getLiveInfoUrl + '?cache=' + Date.now(),
+				type: "POST",
+				dataType: "json",
 				data: postData,
 				headers: {
-					"Content-Type": "application/x-www-form-urlencoded"
-					,"Accept": "application/json, text/javascript, */*; q=0.01"
-					,"Referer": "https://vod.skyperfectv.co.jp/live_list.php"
-					,"X-Requested-With": "XMLHttpRequest"
+					"Content-Type": "application/x-www-form-urlencoded",
+					"Accept": "application/json, text/javascript, */*; q=0.01",
+					"X-Requested-With": "XMLHttpRequest"
 				},
-				onload: function(response){
-					var json = JSON.parse(response.responseText);
+				success: function(json){
+					//console.log(self.getLiveInfoUrl + '?cache=' + Date.now())
+					//console.log(json)
 					var episodes = json[1].episode;
 					var data = self.classify(episodes, isLive);
 					var div = self.createDiv(data, title, newDivId);
@@ -121,10 +124,10 @@
 					}
 				}
 			});
-		}
-
-	}
-
+		};
+	};
+	console.log('start j-league-on-demand.user.js');
 	var j = new JOD();
 	j.showLiveList(j.getLiveInfoData, 'Now On Air!', true);
+	console.log('end   j-league-on-demand.user.js');
 })();
